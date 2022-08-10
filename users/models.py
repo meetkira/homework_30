@@ -18,11 +18,16 @@ class Location(models.Model):
 
 
 class User(AbstractUser):
+    MEMBER = "member"
+    MODERATOR = "moderator"
+    ADMIN = "admin"
+
     ROLE = [
-        ("member", "Пользователь"),
-        ("moderator", "Модератор"),
-        ("admin", "Админ"),
+        (MEMBER, "Пользователь"),
+        (MODERATOR, "Модератор"),
+        (ADMIN, "Админ"),
     ]
+
     role = models.CharField(max_length=9, default="member", choices=ROLE)
     age = models.PositiveIntegerField()
     locations = models.ManyToManyField(Location)

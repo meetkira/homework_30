@@ -1,13 +1,13 @@
 from rest_framework import serializers
 
 from ads.models import Ad
-from ads.serializers import AdSerializer
+from ads.serializers import AdDetailSerializer
 from selections.models import Selection
 from users.models import User
 
 
 class SelectionSerializer(serializers.ModelSerializer):
-    items = AdSerializer(many=True)
+    items = AdDetailSerializer(many=True)
     owner = serializers.SlugRelatedField(
         read_only=True,
         slug_field='username'

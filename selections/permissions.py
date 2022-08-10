@@ -4,10 +4,9 @@ from rest_framework.permissions import BasePermission
 from selections.models import Selection
 
 class CreateSelectionPermission(BasePermission):
-    message = "You can create selection inly for yourself"
+    message = "You can create selection only for yourself"
 
     def has_permission(self, request, view):
-
         if request.data["owner"] != request.user.id:
             return False
 
