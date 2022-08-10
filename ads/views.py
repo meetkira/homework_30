@@ -9,8 +9,11 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, CreateView, ListView, UpdateView, DeleteView
+from rest_framework.generics import RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated
 
 from ads.models import Ad, Category
+from ads.serializers import AdSerializer
 from homework_30 import settings
 from users.models import User
 
@@ -106,23 +109,10 @@ class AdCreateView(CreateView):
             return JsonResponse({"error": str(e)}, status=403)
 
 
-class AdDetailView(DetailView):
-    model = Ad
-
-    def get(self, request, *args, **kwargs):
-        super().get(request, *args, **kwargs)
-        self.object = self.get_object()
-
-        return JsonResponse({
-            "id": self.object.id,
-            "name": self.object.name,
-            "price": self.object.price,
-            "description": self.object.description,
-            "is_published": self.object.is_published,
-            "image": self.object.image.url if self.object.image else None,
-            "author": self.object.author.first_name,
-            "category": self.object.category.name,
-        })
+class AdDetailView(RetrieveAPIView):
+    queryset = Ad.objects.all()
+    serializer_class = AdSerializer
+    permission_classes = [IsAuthenticated]
 
 
 @method_decorator(csrf_exempt, name='dispatch')
